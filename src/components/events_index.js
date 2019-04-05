@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {increment, decrement} from '../actions';
 import {dispatch} from '../../../../../Library/Caches/typescript/3.2/node_modules/rxjs/internal/observable/range';
 
-class App extends Component {
+class EventsIndex extends Component {
   //最初に実行される
 
   //reduxにおいては、reduserで状態の初期化を行うので削除
@@ -47,4 +47,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(EventsIndex);
