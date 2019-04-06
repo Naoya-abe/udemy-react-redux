@@ -1,48 +1,45 @@
 import React, {Component} from 'react'; // jsxを使う際にこのReactは必要
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
-import {increment, decrement} from '../actions';
-import {dispatch} from '../../../../../Library/Caches/typescript/3.2/node_modules/rxjs/internal/observable/range';
+import {readEvents} from '../actions';
 
 class EventsIndex extends Component {
-  //最初に実行される
+  componentDidMount() {
+    this.props.readEvents();
+  }
 
-  //reduxにおいては、reduserで状態の初期化を行うので削除
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {count: 0};
-  // }
-
-  //ここも同様にactionとreducerで同じ処理を行うので不要
-  // hundlePlusButton = () => {
-  //   this.setState({count: this.state.count + 1});
-  // };
-
-  // hundleMinusButton = () => {
-  //   this.setState({count: this.state.count - 1});
-  // };
+  renderEvents() {
+    return _.map(this.props.events, event => (
+      <tr key={event.id}>
+        <td>{event.id}</td>
+        <td>{event.title}</td>
+        <td>{event.body}</td>
+      </tr>
+    ));
+  }
 
   render() {
-    const props = this.props;
-
     return (
-      <React.Fragment>
-        <div>value: {props.value}</div>
-        <button onClick={props.increment}>+1</button>
-        <button onClick={props.decrement}>-1</button>
-      </React.Fragment>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Body</th>
+          </tr>
+        </thead>
+        <tbody>{this.renderEvents()}</tbody>
+      </table>
     );
   }
 }
 
 //stateの情報からこのコンポーネントに必要なpropsを取り出してこのコンポーネント内のpropsとしてmappingする機能を持つ関数
-const mapStateToProps = state => ({value: state.count.value});
+const mapStateToProps = state => ({events: state.events});
 
 //あるアクションが発生した時にreducerにtypeに応じた状態遷移を実行させるための関数
-const mapDispatchToProps = dispatch => ({
-  increment: () => dispatch(increment()),
-  decrement: () => dispatch(decrement()),
-});
+const mapDispatchToProps = {readEvents};
 
 export default connect(
   mapStateToProps,
