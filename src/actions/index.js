@@ -1,12 +1,17 @@
-//適切な状態遷移を実現するための仕組みづくり
-export const INCREMENT = 'INCREMENT';
-export const DECREMENT = 'DECREMENT';
+import axios from 'axios';
+export const READ_EVENTS = 'READ_EVENTS';
+export const CREATE_EVENT = 'CREATE_EVENT';
+
+const ROOT_URL = 'https://udemy-utils.herokuapp.com/api/v1';
+const QUERYSTRING = '?token=token123';
 
 //Action Creater
-export const increment = () => ({
-  type: INCREMENT,
-});
+export const readEvents = () => async dispatch => {
+  const response = await axios.get(`${ROOT_URL}/events${QUERYSTRING}`);
+  dispatch({type: READ_EVENTS, response});
+};
 
-export const decrement = () => ({
-  type: DECREMENT,
-});
+export const postEvent = values => async dispatch => {
+  const response = await axios.post(`${ROOT_URL}/events${QUERYSTRING}`, values);
+  dispatch({type: CREATE_EVENT, response});
+};
